@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 import { APP_FILTER, APP_PIPE, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/exception-filter/http.exception.filter';
 import { ValidationPipe } from './common/pipes/validation.pipe';
@@ -10,12 +11,16 @@ import { HttpErrorFilter } from './common/exception-filter/error.filter';
 // import { LogginInterceptor } from './common/logging.interceptor';
 
 @Module({
-  imports: [AuthModule, IdeaModule, TypeOrmModule.forRoot()],
+  imports: [AuthModule, IdeaModule, UsersModule, TypeOrmModule.forRoot()],
   providers: [
     {
       provide: APP_FILTER,
       useClass: HttpErrorFilter
     },
+    // {
+    //   provide: APP_PIPE,
+    //   useClass: ValidationPipe
+    // }
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: LogginInterceptor

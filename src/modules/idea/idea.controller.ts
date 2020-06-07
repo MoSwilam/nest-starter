@@ -1,4 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UsePipes } from '@nestjs/common';
+import { ValidationPipe } from '../../common/pipes/validation.pipe'
+import { JoiValidationPipe } from '../../common/pipes/joi.validation.pipe';
+import { addIdeaSchema } from './schema/idea.schema';
 import { IdeaService } from './idea.service';
 import { IdeaDTO } from './idea.dto';
 
@@ -12,6 +15,7 @@ export class IdeaController {
     }
 
     @Post()
+    @UsePipes(new JoiValidationPipe(addIdeaSchema))
     async createIdea(@Body() data: IdeaDTO){
         return await this.ideaService.create(data);
     }

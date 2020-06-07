@@ -11,8 +11,10 @@ export class HttpErrorFilter implements ExceptionFilter {
 
         const errorResponse = {
             code: status,
+            path: request.url,
+            method: request.method,
             timestamp: new Date().toLocaleString(),
-            message: exception.message
+            message: exception.message,
         }
 
         Logger.error(`${request.method} ${request.url}`, JSON.stringify(errorResponse, undefined, 4), 'ErrorFilter')
