@@ -3,6 +3,10 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { IsJWT } from 'class-validator';
 
+import { UserResponseObject } from './user.dto';
+import { Logger } from '@nestjs/common';
+import { password } from 'src/common/validationSchemas/common.validation.schemas';
+
 @Entity('users')
 export class UserEntity {
     @PrimaryGeneratedColumn()
@@ -20,18 +24,20 @@ export class UserEntity {
 
     @CreateDateColumn()
     createdAt: Date;
+    
 
     @BeforeInsert()
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 8);
     }
 
-    toResponseObject(showToken: boolean = true) {
+    toResponseObject(showToken: boolean = true): UserResponseObject {
         const { id, username, createdAt, token } = this;
+        const responseOject: UserResponseObject = { id, username, createdAt };
         if (showToken) {
-            return { id, token };
+            responseOject.token = token;
         }
-        return { id, username, createdAt };
+        return responseOject;
     }
 
     async comparePassword(attempted: string) {

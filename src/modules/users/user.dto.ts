@@ -7,3 +7,10 @@ export class UserDTO {
     @IsString()
     password: string;
 }
+
+export class UserResponseObject {
+    id: number;
+    username: string;
+    createdAt: Date;
+    token?: string;
+}

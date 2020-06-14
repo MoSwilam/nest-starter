@@ -2,7 +2,7 @@ import { Controller, Post, Get, Body, UsePipes } from '@nestjs/common';
 
 import { JoiValidationPipe } from '../../common/pipes/joi.validation.pipe';
 import { UsersService } from './users.service';
-import { UserDTO } from './user.dto';
+import { UserDTO, UserResponseObject } from './user.dto';
 import { postUser } from './schema/user.schema';
 
 
@@ -17,12 +17,13 @@ export class UsersController {
 
     @Post('login')
     @UsePipes(new JoiValidationPipe(postUser))
-    login(@Body() body: UserDTO) {
-        this.userService.login(body);
+    async login(@Body() body: UserDTO) {
+        return await this.userService.login(body);
     }
 
     @Post('register')
-    register(@Body() body: UserDTO) {
-        return this.userService.register(body);
+    @UsePipes(new JoiValidationPipe(postUser))
+    async register(@Body() body: UserDTO) {
+        return await this.userService.register(body);
     }
 }

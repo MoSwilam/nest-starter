@@ -8,3 +8,4 @@ export const password = string().min(6).max(100);
 export const idSchema: ObjectSchema = object({
     id: id.required(),
 });
+
