@@ -15,8 +15,7 @@ export class UsersService {
 
     async showAll(): Promise<UserResponseObject[]> {
         const users = await this.userRepo.find();
-        console.log(users)
-        return users.map(user => user.toResponseObject())
+        return users.map(user => user.toResponseObject(false));
     }
 
     async login(data): Promise<UserResponseObject> {
