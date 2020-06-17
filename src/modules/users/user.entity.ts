@@ -1,11 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { IsJWT } from 'class-validator';
 
-import { UserResponseObject } from './user.dto';
+import { UserRO } from './user.dto';
 import { Logger } from '@nestjs/common';
 import { password } from 'src/common/validationSchemas/common.validation.schemas';
+import { IdeaEntity } from '../idea/idea.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -22,6 +23,9 @@ export class UserEntity {
     @Column()
     password: string;
 
+    @OneToMany(type => IdeaEntity, idea => idea.author)
+    ideas: IdeaEntity[];
+
     @CreateDateColumn()
     createdAt: Date;
     
@@ -31,11 +35,14 @@ export class UserEntity {
         this.password = await bcrypt.hash(this.password, 8);
     }
 
-    toResponseObject(showToken: boolean = true): UserResponseObject {
+    toResponseObject(showToken: boolean = true): UserRO {
         const { id, username, createdAt, token } = this;
-        const responseOject: UserResponseObject = { id, username, createdAt };
+        const responseOject: UserRO = { id, username, createdAt };
         if (showToken) {
             responseOject.token = token;
+        }
+        if (this.ideas) {
+            responseOject.ideas = this.ideas;
         }
         return responseOject;
     }

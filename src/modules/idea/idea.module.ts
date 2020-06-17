@@ -3,9 +3,10 @@ import { IdeaController } from './idea.controller';
 import { IdeaService } from './idea.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IdeaEntity } from './idea.entity';
+import { UserEntity } from '../users/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([IdeaEntity])],
+  imports: [TypeOrmModule.forFeature([IdeaEntity,UserEntity])],
   controllers: [IdeaController],
   providers: [IdeaService]
 })

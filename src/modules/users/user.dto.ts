@@ -1,4 +1,5 @@
 import { IsString } from 'class-validator';
+import { IdeaEntity } from '../idea/idea.entity';
 
 export class UserDTO {
     @IsString()
@@ -8,9 +9,10 @@ export class UserDTO {
     password: string;
 }
 
-export class UserResponseObject {
+export class UserRO {
     id: number;
     username: string;
     createdAt: Date;
     token?: string;
+    ideas?: IdeaEntity[];
 }

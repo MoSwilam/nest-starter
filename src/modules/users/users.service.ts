@@ -4,21 +4,25 @@ import { Repository } from 'typeorm';
 
 import { UserDTO } from './user.dto';
 import { UserEntity } from './user.entity';
-import { UserResponseObject } from './user.dto';
+import { UserRO } from './user.dto';
+import { IdeaEntity } from '../idea/idea.entity';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(UserEntity)
-        private userRepo: Repository<UserEntity>
+        private userRepo: Repository<UserEntity>,
+
+        @InjectRepository(IdeaEntity)
+        private ideaRepo: Repository<IdeaEntity>
     ) {}
 
-    async showAll(): Promise<UserResponseObject[]> {
-        const users = await this.userRepo.find();
+    async showAll(): Promise<UserRO[]> {
+        const users = await this.userRepo.find({ relations: ['ideas'] });
         return users.map(user => user.toResponseObject(false));
     }
 
-    async login(data): Promise<UserResponseObject> {
+    async login(data): Promise<UserRO> {
         const { username, password } = data;
         const user = await this.userRepo.findOne({where: { username }});
         if (!user || !(await user.comparePassword(password))) {
