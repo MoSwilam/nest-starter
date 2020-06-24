@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { IsJWT } from 'class-validator';
@@ -26,6 +26,10 @@ export class UserEntity {
     @OneToMany(type => IdeaEntity, idea => idea.author)
     ideas: IdeaEntity[];
 
+    @ManyToMany(type => IdeaEntity, { cascade: true })
+    @JoinTable()
+    bookmarks: IdeaEntity[];
+
     @CreateDateColumn()
     createdAt: Date;
     
@@ -43,6 +47,10 @@ export class UserEntity {
         }
         if (this.ideas) {
             responseOject.ideas = this.ideas;
+        }
+
+        if (this.bookmarks) {
+            responseOject.bookmarks = this.bookmarks;
         }
         return responseOject;
     }

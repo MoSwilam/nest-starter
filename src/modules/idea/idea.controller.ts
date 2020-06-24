@@ -11,12 +11,6 @@ import { UserDec } from '../users/user.decorator';
 export class IdeaController {
     constructor(private ideaService: IdeaService) {}
 
-    private logData(options: any) {
-        options.body && Logger.log(`BODY ${JSON.stringify(options.body)}`);
-        options.id && Logger.log(`ID ${JSON.stringify(options.id)}`);
-        options.user && Logger.log(`USER ${JSON.stringify(options.user)}`);
-    }
-
     @Get()
     async showAllIdeas(){
         return await this.ideaService.showAllIdeas();
@@ -37,14 +31,36 @@ export class IdeaController {
     @Put(':id')
     @UseGuards(new AuthGuard())
     async updateIdea(@Param('id') id: number, @UserDec('id') user, @Body() data: Partial<IdeaDTO>) {
-        this.logData({ id, user, data });
         return await this.ideaService.update(id,user, data);
     }
 
     @Delete(':id')
     @UseGuards(new AuthGuard())
     async deleteIdea(@Param('id') id: number, @UserDec('id') user: number) {
-        this.logData({ id, user });
         return await this.ideaService.delete(id, user);
+    }
+
+    @Post(':id/upvote')
+    @UseGuards(new AuthGuard())
+    async upvote(@Param('id') id: number, @UserDec('id') userId: number) {
+        return this.ideaService.upvote(id, userId);
+    }
+
+    @Post(':id/downvote')
+    @UseGuards(new AuthGuard())
+    async downvote(@Param('id') id: number, @UserDec('id') userId: number) {
+        return this.ideaService.downvote(id, userId);
+    }
+
+    @Post(':id/bookmark')
+    @UseGuards(new AuthGuard())
+    async bookmarkIdea(@Param('id') id: number, @UserDec('id') userId: number) {
+        return this.ideaService.bookmarkIdea(id, userId);
+    }
+
+    @Delete(':id/bookmark')
+    @UseGuards(new AuthGuard())
+    async unbookmarkIdea(@Param('id') id: number, @UserDec('id') userId: number) {
+        return this.ideaService.unbookmarkIdea(id, userId);
     }
 }

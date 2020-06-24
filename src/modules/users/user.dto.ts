@@ -15,4 +15,5 @@ export class UserRO {
     createdAt: Date;
     token?: string;
     ideas?: IdeaEntity[];
+    bookmarks?: IdeaEntity[];
 }
