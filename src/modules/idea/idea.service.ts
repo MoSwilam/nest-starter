@@ -57,7 +57,7 @@ export class IdeaService {
     }
 
     async showAllIdeas(): Promise<IdeaRO[]> {
-        const ideas = await this.ideaRepositry.find({ relations: ['author', 'upvotes', 'downvotes'] });
+        const ideas = await this.ideaRepositry.find({ relations: ['author', 'upvotes', 'downvotes', 'comments'] });
         return ideas.map(idea => this.toResponseObject(idea));
     }
 
@@ -69,7 +69,7 @@ export class IdeaService {
     }
 
     async getById(id: number): Promise<IdeaRO> {
-        const idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author', 'upvotes', 'downvotes']})
+        const idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author', 'upvotes', 'downvotes', 'comments']})
         if (!idea) throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
         return this.toResponseObject(idea);
     }
@@ -79,12 +79,12 @@ export class IdeaService {
         if (!idea) throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
         this.ensureOwnershit(idea, userId);
         await this.ideaRepositry.update({id}, data);
-        idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author']});
+        idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author', 'comments']});
         return this.toResponseObject(idea);
     }
 
     async delete(id: number, userId: number): Promise<IdeaEntity> {
-        const idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author']});
+        const idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author', 'comments']});
         if (!idea) throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
         this.ensureOwnershit(idea, userId);
         await this.ideaRepositry.delete({id})
@@ -125,7 +125,7 @@ export class IdeaService {
     }
 
     async upvote(id: number, userId: number) {
-        let idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author', 'upvotes', 'downvotes']});
+        let idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author', 'upvotes', 'downvotes', 'comments']});
         if(!idea) throw new HttpException('Idea doesn\'t exist', HttpStatus.NOT_FOUND);
         const user = await this.userRepository.findOne({where: {id: userId}})
 
@@ -134,7 +134,7 @@ export class IdeaService {
     }
 
     async downvote(id: number, userId: number) {
-        let idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author', 'upvotes', 'downvotes']});
+        let idea = await this.ideaRepositry.findOne({where: { id }, relations: ['author', 'upvotes', 'downvotes', 'comments']});
         if(!idea) throw new HttpException('Idea doesn\'t exist', HttpStatus.NOT_FOUND);
         const user = await this.userRepository.findOne({where: {id: userId}})
 
