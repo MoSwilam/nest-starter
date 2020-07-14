@@ -1,4 +1,4 @@
-import { IdeaEntity } from '../idea/idea.entity';
+import { IdeaEntity } from '../ideas/idea.entity';
 
 export class UserDTO {
     id?: number;

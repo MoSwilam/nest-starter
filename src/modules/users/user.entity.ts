@@ -5,7 +5,7 @@ import * as jwt from 'jsonwebtoken';
 import { UserRO } from './user.dto';
 import { Logger } from '@nestjs/common';
 import { password } from 'src/common/validationSchemas/common.validation.schemas';
-import { IdeaEntity } from '../idea/idea.entity';
+import { IdeaEntity } from '../ideas/idea.entity';
 
 @Entity('users')
 export class UserEntity {

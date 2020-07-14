@@ -1,8 +1,30 @@
 type User {
     id: ID!
-    username: String
+    firstName: String
+    lastName: String
+    email: String
+    isEmailVerified: Boolean
+    isBlocked: Boolean
+    ideas: [Idea!]
 }
 
 type Query {
     users: [User!]
 }
+
+
+#export class UserRO {
+#id?: number;
+#firstName?: string;
+#lastName?: string;
+#email?: string;
+#isEmailVerified?: boolean;
+#isBlocked?: boolean;
+#username?: string;
+#password?: string;
+#token?: string;
+#ideas?: IdeaEntity[];
+#bookmarks?: IdeaEntity[];
+#createdAt?: Date;
+#updatedAt?: Date;
+#}

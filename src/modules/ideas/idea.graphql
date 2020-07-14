@@ -1,0 +1,22 @@
+#export class IdeaRO {
+#id?: number;
+#idea: string;
+#description: string;
+#createdAt: Date;
+#updatedAt: Date;
+#author: UserRO;
+#upvotes: number;
+#downvotes: number;
+#}
+
+type Idea {
+    id: ID!
+    idea: String!
+    description: String!
+    author: User
+    upvotes: Int
+    downvotes: Int
+    createdAt: String!
+    updatedAt: String!
+}
+

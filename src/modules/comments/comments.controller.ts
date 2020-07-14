@@ -11,7 +11,7 @@ import { CommentDTO } from "./comments.dto";
 export class CommentsController {
   constructor(private commentService: CommentsService) {}
 
-  @Get('idea/:id')
+  @Get('ideas/:id')
   showCommentsByIdea(@Param('id') ideaId: number) {
     return this.commentService.showByIdea(ideaId);
   }
@@ -21,7 +21,7 @@ export class CommentsController {
     return this.commentService.showByUser(userId);
   }
 
-  @Post('idea/:id')
+  @Post('ideas/:id')
   @UseGuards(new AuthGuard())
   //@UsePipes(new JoiValidationPipe(postComment))
   async postComment(@Param('id') ideaId: number, @UserDec('id') userId: number, @Body() data: CommentDTO) {

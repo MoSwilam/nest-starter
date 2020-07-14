@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { UserDTO } from './user.dto';
 import { UserEntity } from './user.entity';
 import { UserRO } from './user.dto';
-import { IdeaEntity } from '../idea/idea.entity';
+import { IdeaEntity } from '../ideas/idea.entity';
 
 @Injectable()
 export class UsersService {

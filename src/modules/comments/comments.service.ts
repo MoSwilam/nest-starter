@@ -2,9 +2,9 @@ import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CommentEntity } from "./comments.entity";
 import { Repository } from "typeorm";
-import { IdeaEntity } from "../idea/idea.entity";
+import { IdeaEntity } from "../ideas/idea.entity";
 import { UserEntity } from "../users/user.entity";
-import { IdeaDTO } from "../idea/idea.dto";
+import { IdeaDTO } from "../ideas/idea.dto";
 import { CommentDTO } from "./comments.dto";
 
 @Injectable()
@@ -35,7 +35,7 @@ export class CommentsService {
   }
 
   async showByIdea(ideaId: number) {
-    const idea = await this.ideasRepo.findOne({where: {id: ideaId}, relations: ['comments', 'comments.author', 'comments.idea']});
+    const idea = await this.ideasRepo.findOne({where: {id: ideaId}, relations: ['comments', 'comments.author', 'comments.ideas']});
     if (!idea) throw new HttpException('Idea not found', HttpStatus.NOT_FOUND);
     return idea.comments.map(comment => this.toResponseObject(comment));
   }
