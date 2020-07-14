@@ -4,7 +4,7 @@ import { type } from 'os';
 import { CommentEntity } from '../comments/comments.entity';
 
 
-@Entity('idea')
+@Entity('ideas')
 export class IdeaEntity {
     @PrimaryGeneratedColumn()
     id: number;

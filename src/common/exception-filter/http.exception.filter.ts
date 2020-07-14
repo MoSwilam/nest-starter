@@ -1,27 +1,56 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Catch, ArgumentsHost, Inject, HttpServer, HttpStatus } from '@nestjs/common';
+import { BaseExceptionFilter, HttpAdapterHost } from '@nestjs/core';
+//import { AppLoggerService } from '../modules/shared/services/logger.service';
 
-@Catch(HttpException)
-export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+@Catch()
+export class AllExceptionsFilter extends BaseExceptionFilter {
+  constructor(
+    @Inject(HttpAdapterHost) applicationRef: HttpServer,
+    //private logger: AppLoggerService
+  ) {
+    super(applicationRef);
+  }
+
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
-    // const status = exception.getStatus();
+    const response = ctx.getResponse();
+    // const request = ctx.getRequest();
+    let status = exception.getStatus() || HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const status = 
-        exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    //this.logger.error(exception);
+    console.log('------------------');
 
-    // HANDLE CUSTOM CASES HERE 
+
+    const message = (exception instanceof Error) ? exception.message : exception.message.error;
+
+    if (exception.status === HttpStatus.NOT_FOUND) {
+      status = HttpStatus.NOT_FOUND;
+    }
+
+    if (exception.status === HttpStatus.SERVICE_UNAVAILABLE) {
+      status = HttpStatus.SERVICE_UNAVAILABLE;
+    }
+
+    if (exception.status === HttpStatus.NOT_ACCEPTABLE) {
+      status = HttpStatus.NOT_ACCEPTABLE;
+    }
+
+    if (exception.status === HttpStatus.EXPECTATION_FAILED) {
+      status = HttpStatus.EXPECTATION_FAILED;
+    }
+
+    if (exception.status === HttpStatus.BAD_REQUEST) {
+      status = HttpStatus.BAD_REQUEST;
+    }
 
     response
       .status(status)
       .json({
-        statusCode: status,
-        timestamp: new Date().toISOString(),
-        path: request.url,
+        status,
+        success: false,
+        data: [],
+        error: message,
+        message: (status === HttpStatus.INTERNAL_SERVER_ERROR) ? 'Sorry we are experiencing technical problems.' : '',
       });
   }
 }

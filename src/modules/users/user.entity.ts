@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { IsJWT } from 'class-validator';
 
 import { UserRO } from './user.dto';
 import { Logger } from '@nestjs/common';
@@ -13,12 +12,24 @@ export class UserEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({nullable: true})
+    firstName: string;
+
+    @Column({nullable: true})
+    lastName: string;
+
     @Column({
         type: 'text',
-        unique: true
+        unique: true,
+        nullable: true
     })
-    username: string;
+    email: string;
 
+    @Column({default: false})
+    isEmailVerified: boolean;
+
+    @Column({default: false})
+    isBlocked: boolean;
 
     @Column()
     password: string;
@@ -32,7 +43,9 @@ export class UserEntity {
 
     @CreateDateColumn()
     createdAt: Date;
-    
+
+    @CreateDateColumn()
+    updatedAt: Date;
 
     @BeforeInsert()
     async hashPassword() {
@@ -40,19 +53,38 @@ export class UserEntity {
     }
 
     toResponseObject(showToken: boolean = false): UserRO {
-        const { id, username, createdAt, token } = this;
-        const responseOject: UserRO = { id, username, createdAt };
+        const { id,
+            email,
+            firstName,
+            lastName,
+            createdAt,
+            token,
+            isEmailVerified,
+            isBlocked,
+            updatedAt
+        } = this;
+
+        const responseObject: UserRO = {
+            id,
+            email,
+            firstName,
+            lastName,
+            isEmailVerified,
+            isBlocked,
+            createdAt,
+            updatedAt
+        };
         if (showToken) {
-            responseOject.token = token;
+            return {id, token}
         }
         if (this.ideas) {
-            responseOject.ideas = this.ideas;
+            responseObject.ideas = this.ideas;
         }
 
         if (this.bookmarks) {
-            responseOject.bookmarks = this.bookmarks;
+            responseObject.bookmarks = this.bookmarks;
         }
-        return responseOject;
+        return responseObject;
     }
 
     async comparePassword(attempted: string) {
@@ -60,11 +92,11 @@ export class UserEntity {
     }
 
     private get token() {
-        const { id, username } = this;
+        const { id, email } = this;
         return jwt.sign(
             {
                 id,
-                username,
+                email,
             },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }

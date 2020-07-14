@@ -1,11 +1,8 @@
-import { IsString } from 'class-validator';
+// import { IsString } from 'class-validator';
 import { UserRO } from '../users/user.dto';
 
 export class IdeaDTO {
-    @IsString()
     idea: string;
-
-    @IsString()
     description: string;
 }
 
