@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
-import { type } from 'os';
 import { CommentEntity } from '../comments/comments.entity';
 
 
@@ -34,4 +33,4 @@ export class IdeaEntity {
 
     @OneToMany(type => CommentEntity, comment => comment.idea, { cascade: true })
     comments: CommentEntity[]
-} 
+}

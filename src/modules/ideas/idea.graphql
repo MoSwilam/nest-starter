@@ -1,17 +1,8 @@
-#export class IdeaRO {
-#id?: number;
-#idea: string;
-#description: string;
-#createdAt: Date;
-#updatedAt: Date;
-#author: UserRO;
-#upvotes: number;
-#downvotes: number;
-#}
 
 type Idea {
     id: ID!
     idea: String!
+    comments: [Comment!]
     description: String!
     author: User
     upvotes: Int
@@ -20,3 +11,6 @@ type Idea {
     updatedAt: String!
 }
 
+type Query {
+    ideas: [Idea!]
+}

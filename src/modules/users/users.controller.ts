@@ -1,11 +1,10 @@
 import { Controller, Post, Get, Body, UsePipes, UseGuards, Param, ParseIntPipe } from '@nestjs/common';
-
 import { JoiValidationPipe } from '../../common/pipes/joi.validation.pipe';
 import { UsersService } from './users.service';
 import { UserDTO, UserRO } from './user.dto';
 import { UserSchema } from './user.schema';
 import { AuthGuard } from '../../common/guards/auth.guard';
-import { UserDec } from './user.decorator';
+import { UserDec } from '../../common/user.decorator';
 
 
 @Controller('users')
@@ -26,13 +25,13 @@ export class UsersController {
 
     @Post('login')
     @UsePipes(new JoiValidationPipe(UserSchema))
-    async login(@Body() body: Partial<UserDTO>) {
+    async login(@Body() body: UserDTO) {
         return await this.userService.login(body);
     }
 
     @Post('register')
     @UsePipes(new JoiValidationPipe(UserSchema))
-    async register(@Body() body: Partial<UserDTO>) {
+    async register(@Body() body: UserDTO) {
         return await this.userService.register(body);
     }
 }

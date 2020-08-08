@@ -6,25 +6,20 @@ type User {
     isEmailVerified: Boolean
     isBlocked: Boolean
     ideas: [Idea!]
+    bookmarks: [Idea!]
+    comments: [Comment!]
+}
+
+type Auth {
+    id: ID!
+    token: String!
 }
 
 type Query {
     users: [User!]
 }
 
-
-#export class UserRO {
-#id?: number;
-#firstName?: string;
-#lastName?: string;
-#email?: string;
-#isEmailVerified?: boolean;
-#isBlocked?: boolean;
-#username?: string;
-#password?: string;
-#token?: string;
-#ideas?: IdeaEntity[];
-#bookmarks?: IdeaEntity[];
-#createdAt?: Date;
-#updatedAt?: Date;
-#}
+type Mutation {
+    login(email: String!, password: String!): Auth!
+    register(email: String!, password: String!): Auth!
+}

@@ -1,3 +1,5 @@
 type Comment {
-
+    id: ID!
+    comment: String!
+    # author: User
 }

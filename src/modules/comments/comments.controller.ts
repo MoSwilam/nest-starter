@@ -4,7 +4,7 @@ import { AuthGuard } from "src/common/guards/auth.guard";
 import { JoiValidationPipe } from "src/common/pipes/joi.validation.pipe";
 
 import { postComment } from './schemas/comments.schema';
-import { UserDec } from "../users/user.decorator";
+import { UserDec } from "../../common/user.decorator";
 import { CommentDTO } from "./comments.dto";
 
 @Controller('comments')

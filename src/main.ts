@@ -1,5 +1,5 @@
 import 'dotenv'
-import { NestFactory, ModuleRef, HttpAdapterHost } from '@nestjs/core';
+import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as compression from 'compression';
 import * as rateLimit from 'express-rate-limit';
@@ -26,6 +26,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  Logger.log(`Nes app started on port ${port}`, `MAIN.TS`);
+  Logger.log(`Nest app started on port ${port}`, `MAIN.TS`);
 }
+
 bootstrap();

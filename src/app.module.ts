@@ -8,19 +8,30 @@ import { APP_FILTER, APP_PIPE, APP_INTERCEPTOR } from '@nestjs/core';
 import { IdeaModule } from './modules/ideas/idea.module';
 import { HttpErrorFilter } from './common/exception-filter/error.filter';
 import { AllExceptionsFilter } from './common/exception-filter/http.exception.filter';
-// import { LogginInterceptor } from './common/logging.interceptor';
 import { CommentsModule } from './modules/comments/comments.module';
 import { GraphQLModule } from '@nestjs/graphql';
+import { LoggingInterceptor } from './common/interceptor/logging.interceptor';
 
 @Module({
   imports: [IdeaModule,
     GraphQLModule.forRoot({
       typePaths: ['./**/*.graphql'],
+      debug: true,
+      context: ({req}) => req,
     }),
     UsersModule,
     CommentsModule,
     TypeOrmModule.forRoot()],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpErrorFilter
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor
+    }
+  ],
 })
 
 export class AppModule {}

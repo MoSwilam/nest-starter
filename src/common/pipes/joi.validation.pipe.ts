@@ -13,7 +13,7 @@ export class JoiValidationPipe implements PipeTransform {
       stripUnknown: false,
     };
     if (rawData instanceof Object && this.isEmpty(rawData)) {
-      throw new HttpException('Validation failed: No Body SUbmitted!', HttpStatus.BAD_REQUEST)
+      throw new HttpException('Validation failed: No Body Submitted!', HttpStatus.BAD_REQUEST)
     }
 
     const { error, value } = this.schema.validate(rawData, options);

@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UsePipes, UseGuards, Logger, Options } from '@nestjs/common';
 // import { ValidationPipe } from '../../common/pipes/validation.pipe'
 import { JoiValidationPipe } from '../../common/pipes/joi.validation.pipe';
-import { addIdeaSchema } from './schema/idea.schema';
+import { addIdeaSchema } from './idea.schema';
 import { IdeaService } from './idea.service';
 import { IdeaDTO } from './idea.dto';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { UserDec } from '../users/user.decorator';
+import { UserDec } from '../../common/user.decorator';
 
 @Controller('ideas')
 export class IdeaController {
@@ -13,12 +13,12 @@ export class IdeaController {
 
     @Get()
     async showAllIdeas(){
-        return await this.ideaService.showAllIdeas();
+        return await this.ideaService.showAll();
     }
 
     @Post()
     @UseGuards(new AuthGuard())
-    //@UsePipes(new JoiValidationPipe(addIdeaSchema))
+    @UsePipes(new JoiValidationPipe(addIdeaSchema))
     async createIdea(@UserDec('id') userId, @Body() data: IdeaDTO){
         return await this.ideaService.create(userId, data);
     }
