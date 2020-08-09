@@ -29,21 +29,30 @@ export class CommentsService {
   }
 
   async showComment(id: number) {
-    const comment = await this.commentsRepo.findOne({where: {id}, relations: ['author', 'idea']});
+    const comment = await this.commentsRepo.findOne({
+      where: {id}, relations: ['author', 'idea']
+    });
     if (!comment) throw new HttpException('comment not found', HttpStatus.NOT_FOUND);
     return this.toResponseObject(comment);
   }
 
-  async showByIdea(ideaId: number) {
-    const idea = await this.ideasRepo.findOne({where: {id: ideaId}, relations: ['comments', 'comments.author', 'comments.ideas']});
-    if (!idea) throw new HttpException('Idea not found', HttpStatus.NOT_FOUND);
-    return idea.comments.map(comment => this.toResponseObject(comment));
+  async showByIdea(ideaId: number, page: number = 1) {
+    const comments = await this.commentsRepo.find({
+      where: {idea: { id: ideaId }},
+      relations: ['author'],
+      take: 25,
+      skip: 25 * (page - 1)
+    });
+    if (!comments) throw new HttpException('Idea not found', HttpStatus.NOT_FOUND);
+    return comments.map(comment => this.toResponseObject(comment));
   }
 
-  async showByUser(userId: number) {
+  async showByUser(userId: number, page: number = 1) {
     const comments = await this.commentsRepo.find({
-      where: {author: userId},
-      relations: ['author']
+      where: { author: { id: userId } },
+      relations: ['author'],
+      take: 25,
+      skip: 25 * (page - 1)
     })
 
     return comments.map(comment => this.toResponseObject(comment));

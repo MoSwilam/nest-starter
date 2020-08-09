@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UsePipes, UseGuards, Logger, Options } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UsePipes, UseGuards, Logger, Options } from '@nestjs/common';
 // import { ValidationPipe } from '../../common/pipes/validation.pipe'
 import { JoiValidationPipe } from '../../common/pipes/joi.validation.pipe';
 import { addIdeaSchema } from './idea.schema';
@@ -12,8 +12,13 @@ export class IdeaController {
     constructor(private ideaService: IdeaService) {}
 
     @Get()
-    async showAllIdeas(){
-        return await this.ideaService.showAll();
+    async showAll(@Query('page') page: number){
+        return await this.ideaService.showAll(page);
+    }
+
+    @Get('/newest')
+    getNewestIdeas(@Query('page') page: number) {
+        return this.ideaService.showAll(page, true);
     }
 
     @Post()

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, UsePipes, UseGuards, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Get, Body, UsePipes, UseGuards, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { JoiValidationPipe } from '../../common/pipes/joi.validation.pipe';
 import { UsersService } from './users.service';
 import { UserDTO, UserRO } from './user.dto';
@@ -13,8 +13,8 @@ export class UsersController {
 
     @Get('')
     // @UseGuards(new AuthGuard())
-    async showAllUsers() {
-        return await this.userService.showAll();
+    async showAll(@Query('page') page: number) {
+        return await this.userService.showAll(page);
     }
 
     @Get(':id')
