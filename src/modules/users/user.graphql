@@ -16,7 +16,7 @@ type Auth {
 }
 
 type Query {
-    users: [User!]
+    users(page: Int): [User!]
 }
 
 type Mutation {

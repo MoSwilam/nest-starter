@@ -3,6 +3,6 @@ import { id } from '../../common/validationSchemas/common.validation.schemas';
 
 export const addIdeaSchema: ObjectSchema = object({
     idea: string().min(3).max(100),
-    description: string().min(3).max(100).required(),
+    description: string().min(3).max(100),
 })
 

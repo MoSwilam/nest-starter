@@ -18,7 +18,7 @@ export class IdeaController {
 
     @Post()
     @UseGuards(new AuthGuard())
-    @UsePipes(new JoiValidationPipe(addIdeaSchema))
+    // @UsePipes(new JoiValidationPipe(addIdeaSchema))
     async createIdea(@UserDec('id') userId, @Body() data: IdeaDTO){
         return await this.ideaService.create(userId, data);
     }

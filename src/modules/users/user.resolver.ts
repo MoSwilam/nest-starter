@@ -12,7 +12,7 @@ export class UserResolver {
     ) {}
 
   @Query()
-  users(){
+  users(@Args('page') page: number){
     return this.userService.showAll()
   }
 
