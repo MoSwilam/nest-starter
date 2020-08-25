@@ -11,12 +11,14 @@ type User {
 }
 
 type Auth {
-    id: ID!
+    email: String!
     token: String!
 }
 
 type Query {
     users(page: Int): [User!]
+    user(email: String): User!
+    me: User!
 }
 
 type Mutation {

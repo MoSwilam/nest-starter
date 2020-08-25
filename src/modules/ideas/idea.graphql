@@ -12,5 +12,5 @@ type Idea {
 }
 
 type Query {
-    ideas: [Idea!]
+    ideas(page: Int, newest: Boolean): [Idea!]
 }

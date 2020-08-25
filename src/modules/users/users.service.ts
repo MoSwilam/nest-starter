@@ -26,10 +26,16 @@ export class UsersService {
         return users.map(user => user.toResponseObject(false));
     }
 
+    async read(email: string) {
+        const user = await this.userRepo.findOne({where: {email}, relations: ['ideas', 'bookmarks']});
+        if (!user) throw new NotFoundException();
+        return user.toResponseObject();
+    }
+
     async getById(userId: number): Promise<Partial<UserRO>> {
         const user = await this.userRepo.findOne({where: {id: userId}, relations:['ideas', 'bookmarks']});
         if (!user) throw new NotFoundException();
-        return user.toResponseObject(false);
+        return user.toResponseObject();
     }
 
     async login(data): Promise<UserRO> {
@@ -49,6 +55,7 @@ export class UsersService {
         }
         user = await this.userRepo.create(data);
         await this.userRepo.save(user);
+
         return user.toResponseObject(true);
     }
 }

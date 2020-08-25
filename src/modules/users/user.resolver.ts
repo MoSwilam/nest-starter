@@ -1,7 +1,9 @@
-import { Resolver, Query, ResolveProperty, Parent, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, ResolveField, Parent, Mutation, Args, Context } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { CommentsService } from '../comments/comments.service';
 import { UserDTO } from './user.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../../common/guards/auth.guard';
 
 
 @Resolver('User')
@@ -11,26 +13,37 @@ export class UserResolver {
       private commentService: CommentsService
     ) {}
 
-  @Query()
-  users(@Args('page') page: number){
-    return this.userService.showAll()
-  }
-
   @Mutation()
-  register(@Args('email') email: string, @Args('password') password: string) {
+  async register(@Args('email') email: string, @Args('password') password: string) {
     const user: UserDTO = {email, password}
-    return this.userService.register(user);
+    return await this.userService.register(user);
   }
 
   @Mutation()
-  login(@Args() {email, password}) {
+  async login(@Args() {email, password}) {
     const user: UserDTO = {email, password};
-    return this.userService.login(user);
+    return await this.userService.login(user);
   }
 
-  @ResolveProperty()
+  @Query()
+  async users(@Args('page') page: number){
+    return await this.userService.showAll()
+  }
+
+  @Query()
+  async user(@Args('email') email: string) {
+    return await this.userService.read(email);
+  }
+
+  @Query()
+  @UseGuards(new AuthGuard())
+  async me(@Context('user') user) {
+    const {email} = user;
+    return await this.userService.read(email);
+  }
+
+  @ResolveField()
   comments(@Parent() user) {
-    const { id } = user;
-    return this.commentService.showByUser(id);
+    return this.commentService.showByUser(user.id);
   }
 }

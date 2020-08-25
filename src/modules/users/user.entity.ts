@@ -21,7 +21,7 @@ export class UserEntity {
     @Column({
         type: 'text',
         unique: true,
-        nullable: true
+        nullable: false
     })
     email: string;
 
@@ -75,12 +75,13 @@ export class UserEntity {
             updatedAt
         };
         if (showToken) {
-            return {id, token}
-        }
-        if (this.ideas) {
-            responseObject.ideas = this.ideas;
+            return {email, token}
         }
 
+        if (this.ideas) {
+            responseObject.ideas = this.ideas;
+
+        }
         if (this.bookmarks) {
             responseObject.bookmarks = this.bookmarks;
         }

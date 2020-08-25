@@ -4,7 +4,6 @@ import { CommentEntity } from "./comments.entity";
 import { Repository } from "typeorm";
 import { IdeaEntity } from "../ideas/idea.entity";
 import { UserEntity } from "../users/user.entity";
-import { IdeaDTO } from "../ideas/idea.dto";
 import { CommentDTO } from "./comments.dto";
 
 @Injectable()

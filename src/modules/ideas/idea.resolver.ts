@@ -1,4 +1,4 @@
-import { Resolver, Query, ResolveProperty, Parent } from '@nestjs/graphql';
+import { Resolver, Query, ResolveField, Parent, Args } from '@nestjs/graphql';
 import { IdeaService } from './idea.service';
 import { CommentsService } from '../comments/comments.service';
 
@@ -11,14 +11,12 @@ export class IdeaResolver {
   ) {}
 
   @Query()
-  ideas(){
-    return this.ideaService.showAll();
+  ideas(@Args('page') page: number, @Args('newest') newest: boolean){
+    return this.ideaService.showAll(page, newest);
   }
 
-  @ResolveProperty()
+  @ResolveField()
   comments(@Parent() idea) {
-    const { id } = idea;
-    return this.commentService.showByIdea(id);
-
+    return this.commentService.showByIdea(idea.id);
   }
 }
