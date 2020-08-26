@@ -90,7 +90,10 @@ export class IdeaService {
     }
 
     async delete(id: number, userId: number): Promise<IdeaEntity> {
-        const idea = await this.ideaRepository.findOne({where: { id }, relations: ['author', 'comments']});
+        const idea = await this.ideaRepository.findOne({
+            where: { id },
+            relations: ['author', 'comments']
+        });
         if (!idea) throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
         this.ensureOwnershit(idea, userId);
         await this.ideaRepository.delete({id})
