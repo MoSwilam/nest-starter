@@ -6,6 +6,7 @@ import { UserRO } from './user.dto';
 import { Logger } from '@nestjs/common';
 import { password } from 'src/common/validationSchemas/common.validation.schemas';
 import { IdeaEntity } from '../ideas/idea.entity';
+import { CommentEntity } from '../comments/comments.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -40,6 +41,9 @@ export class UserEntity {
     @ManyToMany(type => IdeaEntity, { cascade: true })
     @JoinTable()
     bookmarks: IdeaEntity[];
+
+    @OneToMany(type => CommentEntity, comment => comment.author, { cascade: true })
+    comments: CommentEntity[]
 
     @CreateDateColumn()
     createdAt: Date;

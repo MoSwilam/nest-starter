@@ -9,6 +9,29 @@
 export class Comment {
     id: string;
     comment: string;
+    author?: User;
+}
+
+export abstract class IQuery {
+    abstract comment(id: string): Comment | Promise<Comment>;
+
+    abstract ideas(page?: number, newest?: boolean): Idea[] | Promise<Idea[]>;
+
+    abstract users(page?: number): User[] | Promise<User[]>;
+
+    abstract user(email?: string): User | Promise<User>;
+
+    abstract me(): User | Promise<User>;
+}
+
+export abstract class IMutation {
+    abstract createComment(idea: string, comment?: string): Comment | Promise<Comment>;
+
+    abstract deleteComment(comment: string): Comment | Promise<Comment>;
+
+    abstract login(email: string, password: string): Auth | Promise<Auth>;
+
+    abstract register(email: string, password: string): Auth | Promise<Auth>;
 }
 
 export class Idea {
@@ -21,16 +44,6 @@ export class Idea {
     downvotes?: number;
     createdAt: string;
     updatedAt: string;
-}
-
-export abstract class IQuery {
-    abstract ideas(page?: number, newest?: boolean): Idea[] | Promise<Idea[]>;
-
-    abstract users(page?: number): User[] | Promise<User[]>;
-
-    abstract user(email?: string): User | Promise<User>;
-
-    abstract me(): User | Promise<User>;
 }
 
 export class User {
@@ -48,10 +61,4 @@ export class User {
 export class Auth {
     email: string;
     token: string;
-}
-
-export abstract class IMutation {
-    abstract login(email: string, password: string): Auth | Promise<Auth>;
-
-    abstract register(email: string, password: string): Auth | Promise<Auth>;
 }

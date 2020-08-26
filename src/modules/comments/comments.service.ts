@@ -20,7 +20,7 @@ export class CommentsService {
   ) {}
 
   private toResponseObject(comment: CommentEntity) {
-    const responseObject: any = comment;
+    const responseObject: CommentDTO = comment;
     if (comment.author) {
       responseObject.author = comment.author.toResponseObject();
     }
@@ -72,12 +72,15 @@ export class CommentsService {
   }
 
   async deleteComment(commentId: number, userId: number) {
-    const comment = await this.commentsRepo.findOne({where: {id: commentId}, relations: ['author', 'idea']});
+    const comment = await this.commentsRepo.findOne({
+      where: {id: commentId},
+      relations: ['author', 'idea']
+    });
 
-    if (!comment.author || comment.author.id !== userId) {
+    if (!comment.author || comment.author.id !== userId || !comment.id) {
       throw new HttpException('you do not own this comment to delete it', HttpStatus.UNAUTHORIZED);
     }
-    await this.commentsRepo.remove(comment);
+    await this.commentsRepo.delete(comment);
     return this.toResponseObject(comment);
   }
 }

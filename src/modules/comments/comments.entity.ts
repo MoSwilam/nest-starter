@@ -7,7 +7,7 @@ export class CommentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text')
+  @Column()
   comment: string;
 
   @CreateDateColumn()
