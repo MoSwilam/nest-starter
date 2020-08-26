@@ -15,7 +15,13 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   // app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'http://localhost:4200', // angular
+      'http://localhost:3000', // react
+      'http:localhost:8001' // react-native
+    ]
+  });
   app.use(helmet());
   app.setGlobalPrefix('api');
   app.use(compression());
